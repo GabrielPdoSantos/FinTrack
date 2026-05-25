@@ -1,23 +1,25 @@
 package br.com.gabriel.fintrack.app;
 
 import br.com.gabriel.fintrack.controller.FinTracker;
-import br.com.gabriel.fintrack.dao.Conexao;
 import br.com.gabriel.fintrack.model.Transacao;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
         FinTracker finTracker = new FinTracker();
-        Transacao transacao = new Transacao("Transação teste", 100.00, true, LocalDate.of(2026, 05, 20));
-        // finTracker.adicionarTransicao(transacao);
-        finTracker.listarTransacoes();
+        Transacao t01 = new Transacao("Transação teste01", 150.00, false, LocalDate.of(2026, 05, 19));
+        Transacao t02 = new Transacao("Transação teste02", 1000.00, true, LocalDate.of(2026, 05, 18));
+        Transacao t03 = new Transacao("Transação teste03", 10.00, true, LocalDate.of(2026, 05, 21));
+        finTracker.adicionarTransicao(t01);
+//        finTracker.adicionarTransicao(t02);
+//        finTracker.adicionarTransicao(t03);
+        System.out.println(finTracker.calcularSaldoTotal());
     }
 
-    public static void menu(){
+    public static void menu() {
         Scanner input = new Scanner(System.in);
         System.out.println("===== FINTRACK - SEU CONTROLE FINANCEIRO =====");
         System.out.println("1. Adicionar nova transição");
