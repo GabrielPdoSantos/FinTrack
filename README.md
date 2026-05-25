@@ -217,3 +217,6 @@ Desenvolvido por **Gabriel P dos Santos** como projeto de portfólio durante o a
 ## 📄 Licença
 
 Este projeto está sob a licença MIT.
+
+--- 
+_Ânimo._
