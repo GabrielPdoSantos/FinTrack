@@ -1,6 +1,6 @@
 package br.com.gabriel.fintrack.app;
 
-import br.com.gabriel.fintrack.controller.FinTracker;
+import br.com.gabriel.fintrack.dao.FinTracker;
 import br.com.gabriel.fintrack.model.Transacao;
 
 import java.sql.SQLException;
