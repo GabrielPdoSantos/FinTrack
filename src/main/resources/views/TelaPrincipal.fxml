@@ -1,14 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller=""
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.gabriel.fintrack.controller.TransacaoController">
 
-</AnchorPane>
+    <top>
+        <HBox alignment="CENTER" prefHeight="80.0" spacing="15.0" style="-fx-background-color: #2c3e50;" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="SALDO ATUAL:" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="labelSaldoAtual" text="R$ 0.00" textFill="#2ecc71">
+                    <font>
+                        <Font name="System Bold" size="28.0" />
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <tabs>
+
+                <Tab text="Minhas Transações">
+                    <content>
+                        <AnchorPane>
+                            <children>
+                                <VBox spacing="10.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+                                    <children>
+                                        <TableView fx:id="tabelaTransacoes" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="colunaId" prefWidth="50.0" text="ID" />
+                                                <TableColumn fx:id="colunaDescricao" prefWidth="250.0" text="Descrição" />
+                                                <TableColumn fx:id="colunaValor" prefWidth="120.0" text="Valor (R$)" />
+                                                <TableColumn fx:id="colunaTipo" prefWidth="100.0" text="Tipo" />
+                                                <TableColumn fx:id="colunaData" prefWidth="120.0" text="Data" />
+                                            </columns>
+                                        </TableView>
+
+                                        <HBox alignment="CENTER_RIGHT">
+                                            <children>
+                                                <Button mnemonicParsing="false" onAction="#btnRemoverClicado" prefHeight="35.0" prefWidth="150.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="Remover " />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Nova Transação">
+                    <content>
+                        <AnchorPane>
+                            <children>
+                                <VBox alignment="CENTER" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <Label text="Cadastrar Nova Transação" textFill="#34495e">
+                                            <font>
+                                                <Font name="System Bold" size="20.0" />
+                                            </font>
+                                        </Label>
+
+                                        <GridPane alignment="CENTER" hgap="10.0" vgap="15.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints halignment="RIGHT" minWidth="100.0" prefWidth="120.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="Descrição:" />
+                                                <TextField fx:id="campoDescricao" promptText="Ex: Salário, Conta de Luz" GridPane.columnIndex="1" />
+
+                                                <Label text="Valor (R$):" GridPane.rowIndex="1" />
+                                                <TextField fx:id="campoValor" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                                <Label text="Data:" GridPane.rowIndex="2" />
+                                                <DatePicker fx:id="campoData" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                                <Label text="Tipo:" GridPane.rowIndex="3" />
+                                                <HBox alignment="CENTER_LEFT" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                    <children>
+                                                        <RadioButton fx:id="radioReceita" mnemonicParsing="false" selected="true" text="Receita" textFill="#27ae60">
+                                                            <toggleGroup>
+                                                                <ToggleGroup fx:id="grupoTipo" />
+                                                            </toggleGroup>
+                                                        </RadioButton>
+                                                        <RadioButton fx:id="radioDespesa" mnemonicParsing="false" text="Despesa" textFill="#c0392b" toggleGroup="$grupoTipo" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </GridPane>
+
+                                        <Button mnemonicParsing="false" onAction="#btnSalvarClicado" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="Salvar Transação" />
+
+                                        <Label fx:id="labelMensagem" text="" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+
+            </tabs>
+        </TabPane>
+    </center>
+</BorderPane>
