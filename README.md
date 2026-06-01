@@ -14,6 +14,13 @@ O **FinTrack** nasceu como um projeto de estudos de Java com foco em boas práti
 
 ---
 
+## Screenshots
+
+|                Minhas Transações                 |                Nova Transação                |
+|:------------------------------------------------:|:--------------------------------------------:|
+| ![Minhas Transações](docs/minhas-transacoes.png) | ![Nova Transação](docs/novas-transacoes.png) |
+
+---
 ## Roadmap de Versões
 
 | Versão | Nome | Status | Tecnologias |
