@@ -86,7 +86,15 @@ fintrack/
 - [x] Testes unitários com JUnit 5
 
 ---
+## Como Executar o Projeto
 
+1. Clone o repositório para sua máquina.
+2. Abra o seu gerenciador MySQL e execute o script `db.sql` para criar o banco e as tabelas.
+3. Na raiz do projeto, duplique o arquivo `.env.exemplo` e renomeie a cópia para apenas `.env`.
+4. Abra o arquivo `.env` e coloque o usuário e senha do seu MySQL local.
+5. Execute o projeto através da classe `FinApp.java`.
+
+---
 ## Autor
 
 Desenvolvido por **Gabriel P dos Santos** como projeto de portfólio durante o aprendizado de Java.
