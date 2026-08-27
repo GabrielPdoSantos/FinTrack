@@ -1,11 +1,11 @@
 package br.com.gabriel.fintrack.model;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,16 +14,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Categoria {
-    private String nome;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
+    private String nome;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
 
     @OneToMany(mappedBy = "categoria")
-    private List<Transacao> transacoes = new ArrayList<>();
-
-}
+    private List<Transacao> transacaos;
+    }

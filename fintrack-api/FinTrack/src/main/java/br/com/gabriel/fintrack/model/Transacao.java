@@ -1,29 +1,29 @@
 package br.com.gabriel.fintrack.model;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
 
 @Entity
-@Table(name ="tb_transacoes")
+@Table(name = "tb_transacoes")
 @Data
-@NoArgsConstructor //gera automaticamente um construtor sem nenhum argumento
-@AllArgsConstructor //gera com todos os argumentos
+@NoArgsConstructor
+@AllArgsConstructor
 public class Transacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
+    private String nome;
     private String descricao;
     private BigDecimal valor;
-    private boolean ehReceita;
-    private LocalDate data;
-
+    private Instant timeStamp = Instant.now();
+    @Enumerated
+    private TipoTransacao tipo;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
@@ -32,8 +32,4 @@ public class Transacao {
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
-
-
-
-
 }
