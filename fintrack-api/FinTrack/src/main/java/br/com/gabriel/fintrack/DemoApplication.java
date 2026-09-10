@@ -1,4 +1,4 @@
-package br.com.gabriel.fintrack.app;
+package br.com.gabriel.fintrack;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

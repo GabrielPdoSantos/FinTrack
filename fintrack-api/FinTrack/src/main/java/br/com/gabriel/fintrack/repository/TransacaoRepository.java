@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
-    List<Transacao> findByUsuarioIdAndDataBetween(Long usuarioId, Instant dataInicio, Instant dataFim);
+    List<Transacao> findByUsuarioIdAndDataCriacao(Long usuarioId, Instant dataInicio, Instant dataFim);
 
 
     @Query("SELECT COALESCE(SUM(t.valor),0) FROM Transacao t WHERE t.usuario.id = :usuarioId AND t.tipo = :tipo")

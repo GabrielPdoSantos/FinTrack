@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import br.com.gabriel.fintrack.model.Transacao;
 import java.util.List;
 
 @Entity

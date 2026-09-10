@@ -5,24 +5,27 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_transacoes")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Transacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String nome;
     private String descricao;
     private BigDecimal valor;
-    private Instant timeStamp = Instant.now();
-    @Enumerated
+    @CreationTimestamp
+    @Column(name = "data_criacao", updatable = false)
+    private LocalDateTime dataCriacao;
+    @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
 
     @ManyToOne
