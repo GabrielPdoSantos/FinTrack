@@ -34,4 +34,7 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario")
     private List<Transacao> transacaos;
+
+    @OneToMany(mappedBy = "usuario") // "usuario" é o nome da variável lá na classe Categoria
+    private List<Categoria> categorias;
 }

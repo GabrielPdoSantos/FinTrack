@@ -2,10 +2,14 @@ package br.com.gabriel.fintrack.service;
 
 import br.com.gabriel.fintrack.dto.TransacaoRequestDTO;
 import br.com.gabriel.fintrack.dto.TransacaoResponseDTO;
+import br.com.gabriel.fintrack.exception.TransacaoNaoEncontradaException;
+import br.com.gabriel.fintrack.exception.UsuarioNaoEncontradoException;
 import br.com.gabriel.fintrack.model.Categoria;
 import br.com.gabriel.fintrack.model.Transacao;
+import br.com.gabriel.fintrack.model.Usuario;
 import br.com.gabriel.fintrack.repository.CategoriaRepository;
 import br.com.gabriel.fintrack.repository.TransacaoRepository;
+import br.com.gabriel.fintrack.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +21,14 @@ public class TransacaoService {
 
     private final TransacaoRepository transacaoRepository;
     private final CategoriaRepository categoriaRepository;
+    private final UsuarioRepository usuarioRepository;
     private final ModelMapper modelMapper;
 
 
-    public TransacaoService(TransacaoRepository transacaoRepository, CategoriaRepository categoriaRepository, ModelMapper modelMapper) {
+    public TransacaoService(TransacaoRepository transacaoRepository, CategoriaRepository categoriaRepository,UsuarioRepository usuarioRepository, ModelMapper modelMapper) {
         this.transacaoRepository = transacaoRepository;
         this.categoriaRepository = categoriaRepository;
+        this.usuarioRepository = usuarioRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -40,27 +46,24 @@ public class TransacaoService {
     }
 
     //GET
-    public List<TransacaoResponseDTO> listarTransacoes(){
+    public List<TransacaoResponseDTO> listarTransacoesPorUsuario(String email){
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         return this.transacaoRepository
-                .findAll()
+                .findByUsuario(usuario)
                 .stream()
                 .map(this::transacaoParaResponseDTO)
                 .toList();
     }
-    //GET POR ID
-    public TransacaoResponseDTO buscarTransacoes(Long id){
-        Optional<Transacao> transacao = transacaoRepository.findById(id);
-        if (transacao.isEmpty()){
-            return null;
-        }
-        Transacao transacaoBuscada = transacao.get();
-        return transacaoParaResponseDTO(transacaoBuscada);
-    }
 
    //POST
-    public TransacaoResponseDTO criarTransacao(TransacaoRequestDTO transacaoRequestDTO){
+    public TransacaoResponseDTO criarTransacao(TransacaoRequestDTO transacaoRequestDTO, String email){
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException(email));
+
         Transacao novaTransacao = transacaoRequestDTOparaTransacao(transacaoRequestDTO);
         novaTransacao.setId(null);
+        novaTransacao.setUsuario(usuario);
         Categoria categoria = categoriaRepository.findById(transacaoRequestDTO.getCategoriaId())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada com o ID" + transacaoRequestDTO.getCategoriaId()));
         novaTransacao.setCategoria(categoria);
@@ -68,14 +71,19 @@ public class TransacaoService {
         return transacaoParaResponseDTO(transacaoSalva);
     }
    //PUT
-    public TransacaoResponseDTO atualizarTransacao(Long id, TransacaoRequestDTO transacaoRequestDTO){
-        Optional<Transacao> transacao = transacaoRepository.findById(id);
-        if (transacao.isEmpty()){
-            return null;
+    public TransacaoResponseDTO atualizarTransacao(Long id, TransacaoRequestDTO transacaoRequestDTO, String email){
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException(email));
+
+        Transacao transacaoAtual = transacaoRepository.findById(id)
+                .orElseThrow(() -> new TransacaoNaoEncontradaException(id));
+
+        if (transacaoAtual.getUsuario() == null || !transacaoAtual.getUsuario().getEmail().equals(email)) {
+            throw new RuntimeException("Acesso negado: Esta transação não pertence a você");
         }
-        Transacao transacaoAtual = transacao.get();
         modelMapper.map(transacaoRequestDTO, transacaoAtual);
         transacaoAtual.setId(id);
+        transacaoAtual.setUsuario(usuario);
         Categoria categoria = categoriaRepository.findById(transacaoRequestDTO.getCategoriaId())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
         transacaoAtual.setCategoria(categoria);
@@ -85,12 +93,17 @@ public class TransacaoService {
 
     }
    //DELETE
-    public boolean deletarTransacao(Long id){
-        Optional<Transacao> transacao = transacaoRepository.findById(id);
-        if (transacao.isEmpty()){
-            return false;
+    public boolean deletarTransacao(Long id, String email){
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Transacao transacaoDeletada = transacaoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
+
+        if (transacaoDeletada.getUsuario() == null || !transacaoDeletada.getUsuario().getEmail().equals(email)) {
+            throw new RuntimeException("Acesso negado: Esta transação não pertence a você");
         }
-        Transacao transacaoDeletada = transacao.get();
+
         transacaoRepository.delete(transacaoDeletada);
         return true;
     }

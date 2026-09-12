@@ -54,13 +54,17 @@ public class JwtService {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
+        long umDiaEmMilissegundos = 86400000L;
+        long agora = System.currentTimeMillis();
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setIssuedAt(new Date(agora))
+                .setExpiration(new Date(agora + umDiaEmMilissegundos))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
+
+
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
