@@ -22,4 +22,8 @@ public class Categoria {
 
     @OneToMany(mappedBy = "categoria")
     private List<Transacao> transacaos;
-    }
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+}
